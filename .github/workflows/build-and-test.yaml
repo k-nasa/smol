@@ -23,9 +23,6 @@ jobs:
             profile: minimal
             override: true
 
-      - if: matrix.os == 'ubuntu-latest'
-        run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
-
       - name: Cache cargo registry
         uses: actions/cache@v1
         with:
@@ -76,6 +73,24 @@ jobs:
       with:
         toolchain: nightly
         override: true
+
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: ${{ matrix.target }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: ${{ matrix.target }}-cargo-index-${{ hashFiles('**/Cargo.toml') }}
+
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: target
+        key: ${{ matrix.target }}-cargo-build-target-${{ hashFiles('**/Cargo.toml') }}
 
     - name: Install cross
       run: cargo install cross
