@@ -23,6 +23,9 @@ jobs:
             profile: minimal
             override: true
 
+      - if: matrix.os == 'ubuntu-latest'
+        run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
+
       - name: Cache cargo registry
         uses: actions/cache@v1
         with:
