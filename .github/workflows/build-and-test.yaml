@@ -23,24 +23,6 @@ jobs:
             profile: minimal
             override: true
 
-      - name: Cache cargo registry
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/registry
-          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
-
-      - name: Cache cargo index
-        uses: actions/cache@v1
-        with:
-          path: ~/.cargo/git
-          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.toml') }}
-
-      - name: Cache cargo build
-        uses: actions/cache@v1
-        with:
-          path: target
-          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-build-target-${{ hashFiles('**/Cargo.toml') }}
-
       - name: Run cargo check
         uses: actions-rs/cargo@v1
         with:
@@ -51,6 +33,24 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
+
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
   cross:
     name: Cross compile
@@ -74,6 +74,16 @@ jobs:
         toolchain: nightly
         override: true
 
+
+    - name: Install cross
+      run: cargo install cross
+
+    - name: check
+      run: cross check --target ${{ matrix.target }}
+
+    - name: test
+      run: cross test --target ${{ matrix.target }}
+
     - name: Cache cargo registry
       uses: actions/cache@v1
       with:
@@ -91,12 +101,3 @@ jobs:
       with:
         path: target
         key: ${{ matrix.target }}-cargo-build-target-${{ hashFiles('**/Cargo.toml') }}
-
-    - name: Install cross
-      run: cargo install cross
-
-    - name: check
-      run: cross check --target ${{ matrix.target }}
-
-    - name: test
-      run: cross test --target ${{ matrix.target }}
