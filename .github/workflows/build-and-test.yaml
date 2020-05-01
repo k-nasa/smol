@@ -19,22 +19,25 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.cargo/registry
-          key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-registry
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Cache cargo index
         uses: actions/cache@v1
         with:
           path: ~/.cargo/git
-          key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-index
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Cache cargo binaries
         uses: actions/cache@v1
         with:
           path: ~/.cargo/bin
-          key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-binaries
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-binaries-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Cache cargo build
         uses: actions/cache@v1
         with:
           path: target
-          key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-build-target
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
       - uses: actions/checkout@v2
       - name: Install latest ${{ matrix.rust }}
@@ -73,22 +76,25 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-registry
+        key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-index
+        key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
     - name: Cache cargo binaries
       uses: actions/cache@v1
       with:
         path: ~/.cargo/bin
-        key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-binaries
+        key: ${{ matrix.rust }}-${{ matrix.os }}-cargo-binaries-${{ hashFiles('**/Cargo.lock') }}
+
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
         path: target
-        key: ${{ matrix.rust }}-${{ matrix.os }}-${{ matrix.target }}-cargo-build-target
+        key: ${{ matrix.rust }}-${{ matrix.os }}-${{ matrix.target }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
     - uses: actions/checkout@v2
 
